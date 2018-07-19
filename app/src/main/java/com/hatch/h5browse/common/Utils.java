@@ -2,6 +2,7 @@ package com.hatch.h5browse.common;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,6 +16,7 @@ import android.util.Patterns;
 import android.webkit.WebView;
 
 import com.hatch.h5browse.MyApplication;
+import com.hatch.h5browse.R;
 import com.hatch.h5browse.activity.MainActivity;
 import com.hatch.h5browse.database.CollectionDao;
 import com.hatch.h5browse.database.DownloadDao;
@@ -198,8 +200,21 @@ public class Utils {
         return data;
     }
 
+    //关闭数据库
     public static void closeAllDB() {
         CollectionDao.getInstance().close();
         DownloadDao.getInstance().close();
+    }
+
+
+    public static boolean isAd(Context context, String url) {
+        Resources res = context.getResources();
+        String[] filterUrls = res.getStringArray(R.array.adUrls);
+        for (String adUrl : filterUrls) {
+            if (url.contains(adUrl)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

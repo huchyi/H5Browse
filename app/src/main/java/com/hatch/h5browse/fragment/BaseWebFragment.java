@@ -51,6 +51,7 @@ import com.hatch.h5browse.common.TimeUtils;
 import com.hatch.h5browse.common.UIController;
 import com.hatch.h5browse.common.Utils;
 import com.hatch.h5browse.data.OtherSharedPreferencesUtils;
+import com.hatch.h5browse.data.SettingSharedPreferencesUtils;
 import com.hatch.h5browse.database.CollectionDao;
 import com.hatch.h5browse.dialog.FullScreenDialog;
 import com.hatch.h5browse.dialog.MenuDialog;
@@ -114,6 +115,8 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     private CustomCaptureFragment captureFragment;
 
     private List<CollectionBean> collectionBeanList; //收藏夹list
+
+    private boolean isAdBlock;
 
 
     /**
@@ -236,6 +239,8 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
 
     private void initSetting() {
         setPicMode((boolean) OtherSharedPreferencesUtils.getParam(getContext(), OtherSharedPreferencesUtils.PIC_MODE, true), false);
+
+        isAdBlock = (boolean) SettingSharedPreferencesUtils.getParam(getContext(), SettingSharedPreferencesUtils.AD_BLOCK_MODE, false);
     }
 
     private void loadUrl(String url) {
@@ -413,6 +418,10 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            //判断是否是广告相关的资源链接
+            if (isAdBlock && getContext() != null && Utils.isAd(getContext(), view.getUrl())) {
+                return new WebResourceResponse(null, null, null);
+            }
             return super.shouldInterceptRequest(view, request);
         }
 
