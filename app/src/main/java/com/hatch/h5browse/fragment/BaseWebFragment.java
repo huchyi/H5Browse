@@ -101,7 +101,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     protected AgentWeb mAgentWeb;
     private PopupMenu mPopupMenu;
 
-    private String mUrl = "http://shouji.baidu.com/";//"http://m.baidu.com";//about:blank";//"http://www.hatcher.top/MyBlog/";
+    private String mUrl = "http://shouji.baidu.com/";//"http://m.baidu.com";//"about:blank";//"http://www.hatcher.top/MyBlog/";
     private String mTitleUrl = mUrl;
     private boolean isLoading = false;//是否正在加载中，用于判断底部的按钮显示的图片和转台
     private boolean needClearHistory = false;//回到主页时需要用到
@@ -435,9 +435,9 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
             //intent:// scheme的处理 如果返回false ， 则交给 DefaultWebClient 处理 ， 默认会打开该Activity  ， 如果Activity不存在则跳到应用市场上去.  true 表示拦截
             //例如优酷视频播放 ，intent://play?...package=com.youku.phone;end;
             //优酷想唤起自己应用播放该视频 ， 下面拦截地址返回 true  则会在应用内 H5 播放 ，禁止优酷唤起播放该视频， 如果返回 false ， DefaultWebClient  会根据intent 协议处理 该地址 ， 首先匹配该应用存不存在 ，如果存在 ， 唤起该应用播放 ， 如果不存在 ， 则跳到应用市场下载该应用 .
-            if (url.startsWith("intent://") && url.contains("com.youku.phone")) {
-                return true;
-            }
+//            if (url.startsWith("intent://") && url.contains("com.youku.phone")) {
+//                return true;
+//            }
 			/*else if (isAlipay(view, mUrl))   //1.2.5开始不用调用该方法了 ，只要引入支付宝sdk即可 ， DefaultWebClient 默认会处理相应url调起支付宝
 			    return true;*/
 
@@ -517,17 +517,6 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
          */
         @Override
         public boolean onStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength, AgentWebDownloader.Extra extra) {
-//            LogUtils.i(TAG, "onStart:" + url);
-//            extra.setOpenBreakPointDownload(true) // 是否开启断点续传
-//                    .setIcon(R.drawable.ic_file_download_black_24dp) //下载通知的icon
-//                    .setConnectTimeOut(6000) // 连接最大时长
-//                    .setBlockMaxTime(10 * 60 * 1000)  // 以8KB位单位，默认60s ，如果60s内无法从网络流中读满8KB数据，则抛出异常
-//                    .setDownloadTimeOut(Long.MAX_VALUE) // 下载最大时长
-//                    .setParallelDownload(false)  // 串行下载更节省资源哦
-//                    .setEnableIndicator(true)  // false 关闭进度通知
-////                    .addHeader("Cookie", "xx") // 自定义请求头
-//                    .setAutoOpen(false) // 下载完成自动打开
-//                    .setForceDownload(false); // 强制下载，不管网络网络类型
 
             //**********************************自己处理下载*********************************
 
@@ -542,63 +531,6 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
             return true;
         }
 
-        /**
-         *
-         * 不需要暂停或者停止下载该方法可以不必实现
-         * @param url
-         * @param downloadingService  用户可以通过 DownloadingService#shutdownNow 终止下载
-         */
-        @Override
-        public void onBindService(String url, DownloadingService downloadingService) {
-            super.onBindService(url, downloadingService);
-            mDownloadingService = downloadingService;
-            LogUtils.i(TAG, "onBindService:" + url + "  DownloadingService:" + downloadingService);
-        }
-
-        /**
-         * 回调onUnbindService方法，让用户释放掉 DownloadingService。
-         * @param url
-         * @param downloadingService
-         */
-        @Override
-        public void onUnbindService(String url, DownloadingService downloadingService) {
-            super.onUnbindService(url, downloadingService);
-            mDownloadingService = null;
-            LogUtils.i(TAG, "onUnbindService:" + url);
-        }
-
-        /**
-         *
-         * @param url  下载链接
-         * @param loaded  已经下载的长度
-         * @param length    文件的总大小
-         * @param usedTime   耗时 ，单位ms
-         * 注意该方法回调在子线程 ，线程名 AsyncTask #XX 或者 AgentWeb # XX
-         */
-        @Override
-        public void onProgress(String url, long loaded, long length, long usedTime) {
-            int mProgress = (int) ((loaded) / (float) length * 100);
-            LogUtils.i(TAG, "onProgress:" + mProgress + ",length:" + length + ",usedTime:" + usedTime);
-            super.onProgress(url, loaded, length, usedTime);
-        }
-
-        /**
-         *
-         * @param path 文件的绝对路径
-         * @param url  下载地址
-         * @param throwable    如果异常，返回给用户异常
-         * @return true 表示用户处理了下载完成后续的事件 ，false 默认交给AgentWeb 处理
-         */
-        @Override
-        public boolean onResult(String path, String url, Throwable throwable) {
-            if (null == throwable) { //下载成功
-                //do you work
-                LogUtils.i(TAG, "下载成功:" + path);
-            } else {//下载失败
-                LogUtils.i(TAG, "下载失败:" + path);
-            }
-            return false; // true  不会发出下载完成的通知 , 或者打开文件
-        }
     };
 
     /**
@@ -772,54 +704,6 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
 
     }
 
-
-//    /**
-//     * 菜单事件
-//     */
-//    private PopupMenu.OnMenuItemClickListener mOnMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
-//        @Override
-//        public boolean onMenuItemClick(MenuItem item) {
-//
-//            switch (item.getItemId()) {
-//
-//                case R.id.refresh:
-//                    if (mAgentWeb != null) {
-//                        mAgentWeb.getUrlLoader().reload(); // 刷新
-//                    }
-//                    return true;
-//
-//                case R.id.copy:
-//                    if (mAgentWeb != null) {
-//                        toCopy(BaseWebFragment.this.getContext(), mAgentWeb.getWebCreator().getWebView().getUrl());
-//                    }
-//                    return true;
-//                case R.id.default_browser:
-//                    if (mAgentWeb != null) {
-//                        openBrowser(mAgentWeb.getWebCreator().getWebView().getUrl());
-//                    }
-//                    return true;
-//                case R.id.default_clean:
-//                    toCleanWebCache();
-//                    return true;
-//                case R.id.error_website:
-//                    loadErrorWebSite();
-//                    return true;
-//                default:
-//                    return false;
-//            }
-//
-//        }
-//    };
-
-//    /**
-//     * 测试错误页的显示
-//     */
-//    private void loadErrorWebSite() {
-//        if (mAgentWeb != null) {
-//            mAgentWeb.getUrlLoader().loadUrl("http://www.unkownwebsiteblog.me");
-//        }
-//    }
-//
 
     @Subscribe
     public void cacheClear(CacheClearEvent cacheClearEvent) {
