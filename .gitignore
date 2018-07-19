@@ -1,6 +1,7 @@
 *.iml
 .gradle
 /local.properties
+/.idea
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
@@ -9,5 +10,8 @@
 /captures
 .externalNativeBuild
 /.gradle
-/.idea
 /app/build
+/app/app.iml
+/app/src/test
+/app/src/androidTest
+/H5Browse.iml
