@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_second"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <SurfaceView
+        android:id="@+id/preview_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.uuzuche.lib_zxing.view.ViewfinderView
+        android:id="@+id/viewfinder_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:inner_corner_color="@color/scan_corner_color"
+        app:inner_corner_length="30dp"
+        app:inner_corner_width="5dp"
+        app:inner_height="200dp"
+        app:inner_margintop="150dp"
+        app:inner_scan_bitmap="@drawable/scan_image"
+        app:inner_scan_iscircle="false"
+        app:inner_scan_speed="10"
+        app:inner_width="200dp" />
+
+    <RelativeLayout
+        android:id="@+id/qr_result_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="200dp"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/qr_result_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/close" />
+
+        <TextView
+            android:id="@+id/qr_result_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textColor="#aaaaaa"
+            android:text="解析的内容为"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/qr_result_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/qr_result_tips"
+            android:layout_marginTop="20dp"
+            android:maxLines="10"
+
+            android:textColor="@color/black"
+            android:textSize="12dp" />
+
+
+        <TextView
+            android:id="@+id/qr_result_load"
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/qr_result_content"
+            android:layout_marginTop="20dp"
+            android:text="去加载"
+            android:background="@color/blue_color_light"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/qr_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@mipmap/qr_back" />
+
+        <ImageView
+            android:id="@+id/qr_light_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:src="@mipmap/qr_light_close_icon" />
+
+        <ImageView
+            android:id="@+id/qr_photo_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            android:src="@mipmap/qr_photo_icon" />
+    </RelativeLayout>
+
+</FrameLayout>

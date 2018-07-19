@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:actionBarSize"
+                android:background="@android:color/white"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:titleTextColor="@android:color/white">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#23aaaaaa">
+
+                    <ImageView
+                        android:id="@+id/iv_qr"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/iv_back_selector"
+                        android:contentDescription="二维码"
+                        android:scaleType="center"
+                        android:src="@mipmap/qr_code_icon" />
+
+                    <ImageView
+                        android:id="@+id/iv_reload"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/iv_back_selector"
+                        android:contentDescription="搜索"
+                        android:scaleType="center"
+                        android:src="@mipmap/reload_icon" />
+
+
+                    <TextView
+                        android:id="@+id/toolbar_edit_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toLeftOf="@+id/iv_reload"
+                        android:layout_toRightOf="@+id/iv_qr"
+                        android:background="@android:color/white"
+                        android:drawableLeft="@mipmap/search_icon"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:lines="1"
+                        android:paddingEnd="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+
+                    <TextView
+                        android:id="@+id/toolbar_title_loading_num"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/iv_reload"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textColor="@color/colorPrimary_light_trsp"
+                        android:textSize="14dp" />
+
+                </RelativeLayout>
+
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"
+            android:background="@color/colorWhite"
+            android:gravity="center_vertical"
+            android:weightSum="5"
+            app:layout_behavior="com.hatch.h5browse.common.BottomNavigationViewBehavior">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/iv_back_selector"
+                android:contentDescription="前进"
+                android:scaleType="center"
+                android:src="@mipmap/back_press_icon" />
+
+
+            <ImageView
+                android:id="@+id/iv_finish"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/iv_back_selector"
+                android:contentDescription="后退"
+                android:scaleType="center"
+                android:src="@mipmap/forward_press_icon" />
+
+
+            <ImageView
+                android:id="@+id/iv_setting"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/iv_back_selector"
+                android:contentDescription="设置"
+                android:scaleType="center"
+                android:src="@mipmap/meun_icon" />
+
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/iv_page_num_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="#232323"
+                    android:textSize="12dp" />
+
+                <ImageView
+                    android:id="@+id/iv_page_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/iv_back_selector"
+                    android:contentDescription="网页个数"
+                    android:scaleType="center"
+                    android:src="@mipmap/page_num_icon" />
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/iv_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/iv_back_selector"
+                android:contentDescription="主页"
+                android:scaleType="center"
+                android:src="@mipmap/home_icon" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/fragment_center_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="H搜索"
+                android:textColor="@color/black"
+                android:textSize="24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_stroke_line"
+                android:drawableLeft="@mipmap/search_icon"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:lines="1"
+                android:nextFocusDown="@id/full_dialog_iv_search"
+                android:paddingEnd="40dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="40dp"
+                android:singleLine="true"
+                android:text="搜索"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+    <FrameLayout
+        android:id="@+id/qr_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>
+
+

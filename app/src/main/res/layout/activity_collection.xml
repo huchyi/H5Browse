@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_title"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:background="#23aaaaaa">
+
+        <ImageView
+            android:id="@+id/collection_back"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/iv_back_selector"
+            android:contentDescription="二维码"
+            android:scaleType="center"
+            android:src="@mipmap/back_icon" />
+
+        <TextView
+            android:id="@+id/toolbar_title_loading_num"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="收藏夹"
+            android:textColor="@color/colorMain"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/item_title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/collection_clear"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/iv_back_selector"
+            android:contentDescription="二维码"
+            android:scaleType="center"
+            android:src="@mipmap/clear_icon" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

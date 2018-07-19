@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+    defaultConfig {
+        applicationId "com.hatch.h5browse"
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:${SUPPORT_LIB_VERSION}"
+    implementation "com.android.support:recyclerview-v7:${SUPPORT_LIB_VERSION}"
+    implementation "com.android.support:cardview-v7:${SUPPORT_LIB_VERSION}"
+//    implementation "com.android.support:percent:${SUPPORT_LIB_VERSION}"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // agent
+    implementation "com.android.support:design:${SUPPORT_LIB_VERSION}" // (3.0.0开始该库可选)
+    implementation "com.android.support:support-v4:${SUPPORT_LIB_VERSION}"
+    implementation 'com.just.agentweb:agentweb:4.0.2' // (必选)
+    implementation 'com.just.agentweb:download:4.0.2' // (可选)
+    implementation 'com.just.agentweb:filechooser:4.0.2'// (可选)
+    implementation 'com.coolindicator.sdk:coolindicator:1.0.0-beta'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
+
+    implementation 'cn.yipianfengye.android:zxing-library:2.2'//zxing集成
+//    implementation 'com.google.zxing:core:3.3.0';
+    implementation 'com.google.zxing:android-core:3.3.0';//zxing集成
+
+    implementation 'com.liulishuo.okdownload:okdownload:1.0.3' //下载相关库
+    implementation 'com.liulishuo.okdownload:sqlite:1.0.3'//下载相关库
+
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
+
+}

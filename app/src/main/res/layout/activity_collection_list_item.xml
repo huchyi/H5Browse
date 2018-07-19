@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp">
+
+
+    <ImageView
+        android:id="@+id/item_img"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_launcher" />
+
+
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/item_img"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="标题"
+        android:textColor="@color/colorMain"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/item_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_title"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/item_img"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="链接"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_url"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/item_img"
+        android:text="时间"
+        android:textColor="@color/colorPrimary_light_trsp"
+        android:textSize="8sp" />
+
+
+</RelativeLayout>

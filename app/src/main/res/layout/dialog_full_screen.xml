@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:background="@color/colorGray">
+
+        <ImageView
+            android:id="@+id/full_dialog_iv_qr"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/iv_back_selector"
+            android:contentDescription="二维码"
+            android:scaleType="center"
+            android:src="@mipmap/qr_code_icon" />
+
+        <ImageView
+            android:id="@+id/full_dialog_iv_search"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/iv_back_selector"
+            android:contentDescription="搜索"
+            android:scaleType="center"
+            android:src="@mipmap/search_icon" />
+
+
+        <EditText
+            android:id="@+id/full_dialog_edit_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/full_dialog_iv_search"
+            android:layout_toRightOf="@+id/full_dialog_iv_qr"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:nextFocusDown="@id/full_dialog_iv_search"
+            android:paddingEnd="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+
+        <ImageView
+            android:id="@+id/full_dialog_iv_clear_text"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="1dp"
+            android:layout_toLeftOf="@+id/full_dialog_iv_search"
+            android:contentDescription="清除"
+            android:scaleType="center"
+            android:src="@mipmap/close" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/full_dialog_clip_data_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:textColor="#aaaaaa"
+        android:text="点击下方内容粘贴到输入框"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/full_dialog_clip_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:visibility="gone" />
+
+
+</LinearLayout>
