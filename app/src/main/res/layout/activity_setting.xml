@@ -1,6 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/setting_title"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:background="#23aaaaaa">
+
+        <ImageView
+            android:id="@+id/setting_title_back"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/iv_back_selector"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@mipmap/back_icon" />
+
+        <TextView
+            android:id="@+id/setting_title_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="设置"
+            android:textColor="@color/colorMain"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/setting_clear_cache"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/iv_back_selector"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="清空缓存"
+            android:textColor="@color/colorMain"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            android:src="@mipmap/forward_icon" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorMain" />
+    </RelativeLayout>
+
+
+</LinearLayout>

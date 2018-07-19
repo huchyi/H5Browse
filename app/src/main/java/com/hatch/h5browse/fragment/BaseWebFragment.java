@@ -54,6 +54,7 @@ import com.hatch.h5browse.data.OtherSharedPreferencesUtils;
 import com.hatch.h5browse.database.CollectionDao;
 import com.hatch.h5browse.dialog.FullScreenDialog;
 import com.hatch.h5browse.dialog.MenuDialog;
+import com.hatch.h5browse.event.CacheClearEvent;
 import com.hatch.h5browse.service.DownloadService;
 import com.just.agentweb.AbsAgentWebSettings;
 import com.just.agentweb.AgentWeb;
@@ -71,6 +72,9 @@ import com.just.agentweb.download.DefaultDownloadImpl;
 import com.just.agentweb.download.DownloadListenerAdapter;
 import com.just.agentweb.download.DownloadingService;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +149,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initCreate();
+        EventBus.getDefault().register(this);
     }
 
 
@@ -156,7 +161,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        EventBus.getDefault().unregister(this);
     }
 
     private View mRootView;
@@ -815,21 +820,24 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
 //        }
 //    }
 //
-//    /**
-//     * 清除 WebView 缓存
-//     */
-//    private void toCleanWebCache() {
-//
-//        if (this.mAgentWeb != null) {
-//
-//            //清理所有跟WebView相关的缓存 ，数据库， 历史记录 等。
-//            this.mAgentWeb.clearWebCache();
-//            MyApplication.showToast("已清理缓存");
-//            //清空所有 AgentWeb 硬盘缓存，包括 WebView 的缓存 , AgentWeb 下载的图片 ，视频 ，apk 等文件。
-////            AgentWebConfig.clearDiskCache(this.getContext());
-//        }
-//
-//    }
+
+    @Subscribe
+    public void cacheClear(CacheClearEvent cacheClearEvent) {
+        toCleanWebCache();
+    }
+
+    /**
+     * 清除 WebView 缓存
+     */
+    private void toCleanWebCache() {
+
+        if (this.mAgentWeb != null) {
+
+            //清理所有跟WebView相关的缓存 ，数据库， 历史记录 等。
+            this.mAgentWeb.clearWebCache();
+        }
+
+    }
 
     /**
      * 收藏
