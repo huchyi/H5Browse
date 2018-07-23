@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,6 +36,15 @@ public class CustomCaptureFragment extends CaptureFragment {
         void onBack();
     }
 
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        try {//这里有异常可能会奔溃
+            super.surfaceCreated(holder);
+        } catch (Exception e) {
+        }
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,9 +68,9 @@ public class CustomCaptureFragment extends CaptureFragment {
             @Override
             public void onClick(View v) {
                 CodeUtils.isLightEnable(isLighting = !isLighting);
-                if(isLighting){
+                if (isLighting) {
                     lightIV.setImageResource(R.mipmap.qr_light_open_icon);
-                }else{
+                } else {
                     lightIV.setImageResource(R.mipmap.qr_light_close_icon);
                 }
 
@@ -86,7 +96,7 @@ public class CustomCaptureFragment extends CaptureFragment {
                 mResultTV.setText("");
                 //重置扫描
                 Message obtain = Message.obtain();
-                obtain.what=R.id.restart_preview;
+                obtain.what = R.id.restart_preview;
                 getHandler().sendMessageDelayed(obtain, 500);
             }
         });
@@ -109,7 +119,7 @@ public class CustomCaptureFragment extends CaptureFragment {
         @Override
         public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
             mResultTV.setText(result);
-            if(relativeLayout.getVisibility() != View.VISIBLE){
+            if (relativeLayout.getVisibility() != View.VISIBLE) {
                 relativeLayout.setVisibility(View.VISIBLE);
             }
         }
@@ -125,8 +135,8 @@ public class CustomCaptureFragment extends CaptureFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(hidden){
-            if(relativeLayout.getVisibility() != View.GONE){
+        if (hidden) {
+            if (relativeLayout.getVisibility() != View.GONE) {
                 relativeLayout.setVisibility(View.GONE);
             }
             mResultTV.setText("");
@@ -148,7 +158,7 @@ public class CustomCaptureFragment extends CaptureFragment {
                         @Override
                         public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
                             mResultTV.setText(result);
-                            if(relativeLayout.getVisibility() != View.VISIBLE){
+                            if (relativeLayout.getVisibility() != View.VISIBLE) {
                                 relativeLayout.setVisibility(View.VISIBLE);
                             }
                         }
