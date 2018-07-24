@@ -103,7 +103,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     protected AgentWeb mAgentWeb;
     private PopupMenu mPopupMenu;
 
-    private String mUrl = "about:blank";//http://www.yundaquan.com/";//"http://shouji.baidu.com/";//"http://m.baidu.com";//"about:blank";//"http://www.hatcher.top/MyBlog/";
+    private String mUrl = "http://m.baidu.com";//http://www.yundaquan.com/";//"http://shouji.baidu.com/";//"http://m.baidu.com";//"about:blank";//"http://www.hatcher.top/MyBlog/";
     private String mTitleUrl = mUrl;
     private boolean isLoading = false;//是否正在加载中，用于判断底部的按钮显示的图片和转台
     private boolean needClearHistory = false;//回到主页时需要用到

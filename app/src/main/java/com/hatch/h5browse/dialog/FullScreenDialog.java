@@ -142,7 +142,7 @@ public class FullScreenDialog extends Dialog {
                     }
                     break;
                 case R.id.full_dialog_main_ll:
-                    dismiss();
+                    FullScreenDialog.this.dismiss();
                     break;
                 default:
                     break;
