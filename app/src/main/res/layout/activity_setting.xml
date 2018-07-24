@@ -24,7 +24,6 @@
             android:id="@+id/setting_title_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
             android:gravity="center"
             android:lines="1"
             android:singleLine="true"

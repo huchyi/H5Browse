@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
@@ -102,7 +103,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     protected AgentWeb mAgentWeb;
     private PopupMenu mPopupMenu;
 
-    private String mUrl = "http://shouji.baidu.com/";//"http://m.baidu.com";//"about:blank";//"http://www.hatcher.top/MyBlog/";
+    private String mUrl = "about:blank";//http://www.yundaquan.com/";//"http://shouji.baidu.com/";//"http://m.baidu.com";//"about:blank";//"http://www.hatcher.top/MyBlog/";
     private String mTitleUrl = mUrl;
     private boolean isLoading = false;//是否正在加载中，用于判断底部的按钮显示的图片和转台
     private boolean needClearHistory = false;//回到主页时需要用到
@@ -186,6 +187,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         super.onViewCreated(view, savedInstanceState);
     }
 
+
     private void initCreate() {
         collectionBeanList = new ArrayList<>();
     }
@@ -194,11 +196,11 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         initView(view);
         initData();
         loadUrl(mUrl);
-
+        initSetting();
         // AgentWeb 没有把WebView的功能全面覆盖 ，所以某些设置 AgentWeb 没有提供 ， 请从WebView方面入手设置。
         mAgentWeb.getWebCreator().getWebView().setOverScrollMode(WebView.OVER_SCROLL_NEVER);
         AgentWebConfig.debug();//chrome的debug调试
-        initSetting();
+
     }
 
 
@@ -415,14 +417,28 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
             return shouldOverrideUrlLoading(view, request.getUrl() + "");
         }
 
+//        @Nullable
+//        @Override
+//        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+//            //判断是否是广告相关的资源链接
+//            Log.i("hcy", "shouldInterceptRequest request: ");
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                if (isAdBlock && getContext() != null && Utils.isAd(getContext(), String.valueOf(request.getUrl()))) {
+//                    return new WebResourceResponse(null, null, null);
+//                }
+//            }
+//            return super.shouldInterceptRequest(view, request);
+//        }
+
         @Nullable
         @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             //判断是否是广告相关的资源链接
-            if (isAdBlock && getContext() != null && Utils.isAd(getContext(), view.getUrl())) {
+            if (isAdBlock && getContext() != null && !TextUtils.isEmpty(url) && Utils.isAd(getContext(), url)) {
                 return new WebResourceResponse(null, null, null);
             }
-            return super.shouldInterceptRequest(view, request);
+
+            return super.shouldInterceptRequest(view, url);
         }
 
         @Override
@@ -832,6 +848,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     @Override
     public void onResume() {
         mAgentWeb.getWebLifeCycle().onResume();//恢复
+        initSetting();
         super.onResume();
     }
 

@@ -49,6 +49,7 @@ public class FullScreenDialog extends Dialog {
 
     public interface OnFullScreenDialogListener {
         void onUrlListener(String url);
+
         void openQRListener();
     }
 
@@ -56,7 +57,7 @@ public class FullScreenDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //<!--关键点1-->
-        if(getWindow() != null){
+        if (getWindow() != null) {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         }
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_full_screen, null);
@@ -78,6 +79,8 @@ public class FullScreenDialog extends Dialog {
         mClipDataTipsTV = view.findViewById(R.id.full_dialog_clip_data_tips);
         mClipDataTV = view.findViewById(R.id.full_dialog_clip_data);
 
+        view.findViewById(R.id.full_dialog_main_ll).setOnClickListener(mOnClickListener);
+
         mQRCodeIV.setOnClickListener(mOnClickListener);
         mClearIV.setOnClickListener(mOnClickListener);
         mSearchIV.setOnClickListener(mOnClickListener);
@@ -90,12 +93,12 @@ public class FullScreenDialog extends Dialog {
             mTitleET.setText(mUrl);
             mTitleET.setSelection(mUrl.length());
         }
-        ClipboardManager mClipboardManager = (ClipboardManager)mContext.getSystemService(CLIPBOARD_SERVICE);
-        if(mClipboardManager != null){
+        ClipboardManager mClipboardManager = (ClipboardManager) mContext.getSystemService(CLIPBOARD_SERVICE);
+        if (mClipboardManager != null) {
             ClipData mClipData = mClipboardManager.getPrimaryClip();
             ClipData.Item item = mClipData.getItemAt(0);
             String clipData = item.getText().toString();
-            if(!TextUtils.isEmpty(clipData)){
+            if (!TextUtils.isEmpty(clipData)) {
                 mClipDataTipsTV.setVisibility(View.VISIBLE);
                 mClipDataTV.setText(clipData);
                 mClipDataTV.setVisibility(View.VISIBLE);
@@ -131,12 +134,15 @@ public class FullScreenDialog extends Dialog {
                 case R.id.full_dialog_clip_data_tips:
                 case R.id.full_dialog_clip_data:
                     String clipData = mClipDataTV.getText().toString();
-                    if(!TextUtils.isEmpty(clipData)){
+                    if (!TextUtils.isEmpty(clipData)) {
                         mTitleET.setText(clipData);
                         mTitleET.setSelection(clipData.length());
                         mClipDataTipsTV.setVisibility(View.GONE);
                         mClipDataTV.setVisibility(View.GONE);
                     }
+                    break;
+                case R.id.full_dialog_main_ll:
+                    dismiss();
                     break;
                 default:
                     break;

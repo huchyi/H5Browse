@@ -20,12 +20,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        findViewById(R.id.setting_clear_cache).setOnClickListener(this);
         initView();
         defaultSetting();
     }
 
     private void initView() {
+        findViewById(R.id.setting_title_back).setOnClickListener(this);
+        findViewById(R.id.setting_clear_cache).setOnClickListener(this);
         adBlockIV = findViewById(R.id.setting_ad_block_switch);
         adBlockIV.setOnClickListener(this);
     }
@@ -46,6 +47,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
             case R.id.setting_ad_block_switch:
                 adBlockSwitch();
+                break;
+            case R.id.setting_title_back:
+                finish();
                 break;
             default:
                 break;

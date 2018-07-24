@@ -54,7 +54,7 @@ public class QueueController {
 
     private void initTasks(@NonNull Context context, @NonNull DownloadContextListener listener) {
         final DownloadContext.QueueSet set = new DownloadContext.QueueSet();
-        this.queueDir = new File(getParentFile(context), "download");
+        this.queueDir = new File(Utils.getParentFile(context), "download");
 
         set.setParentPathFile(queueDir);
         set.setMinIntervalMillisCallbackProcess(200);
@@ -151,14 +151,6 @@ public class QueueController {
             this.taskList = new ArrayList<>();
         }
         deleteFiles();
-    }
-
-    private static File getParentFile(@NonNull Context context) {
-        String url = Utils.getSDPath();
-        if (url == null) {
-            return context.getCacheDir();
-        }
-        return new File(url + "/H5Browse/");
     }
 
 

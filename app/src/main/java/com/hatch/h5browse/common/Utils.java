@@ -10,8 +10,10 @@ import android.graphics.Matrix;
 import android.graphics.Picture;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.webkit.WebView;
 
@@ -139,6 +141,23 @@ public class Utils {
         return sdDir.toString();
     }
 
+
+    public static File getParentFile(@NonNull Context context) {
+        String url = Utils.getSDPath();
+        if (url == null) {
+            url = context.getCacheDir().getPath();
+        }
+        return new File(url + "/H5Browse/");
+    }
+
+    public static String getParentFileString(@NonNull Context context) {
+        String url = Utils.getSDPath();
+        if (url == null) {
+            url = context.getCacheDir().getPath();
+        }
+        return url + "/H5Browse/";
+    }
+
     /**
      * 退出确认框
      */
@@ -208,10 +227,28 @@ public class Utils {
 
 
     public static boolean isAd(Context context, String url) {
+        Log.i("hcy","isAd url:" + url);
         Resources res = context.getResources();
-        String[] filterUrls = res.getStringArray(R.array.adUrls);
+        String[] filterUrls = AdFiltersUtils.adIP;
+        if (filterUrls == null || filterUrls.length <= 0) {
+            filterUrls = res.getStringArray(R.array.adUrls);
+        }
         for (String adUrl : filterUrls) {
-            if (url.contains(adUrl)) {
+            if (adUrl.contains("*")) {
+                String[] split = adUrl.split("\\*");
+                boolean isThis = true;
+                for (String str : split) {
+                    if (!url.contains(str)) {
+                        isThis = false;
+                        break;
+                    }
+                }
+                if (isThis) {
+                    Log.i("hcy",adUrl + ",isAd * url:" + url);
+                    return true;
+                }
+            } else if (url.contains(adUrl)) {
+                Log.i("hcy","isAd  url:" + url);
                 return true;
             }
         }
