@@ -33,6 +33,15 @@ public class FullScreenDialog extends Dialog {
     private ImageView mSearchIV;
     private EditText mTitleET;
 
+    private TextView mBottomWWW;
+    private TextView mBottomM;
+    private TextView mBottomHTTP;
+    private TextView mBottomHTTPS;
+    private TextView mBottomPoint;
+    private TextView mBottomSlash;
+    private TextView mBottomCN;
+    private TextView mBottomCOM;
+
     private String mUrl = "";
     private OnFullScreenDialogListener OnFullScreenDialogListener;
     private Context mContext;
@@ -79,6 +88,16 @@ public class FullScreenDialog extends Dialog {
         mClipDataTipsTV = view.findViewById(R.id.full_dialog_clip_data_tips);
         mClipDataTV = view.findViewById(R.id.full_dialog_clip_data);
 
+
+        mBottomWWW = view.findViewById(R.id.full_dialog_bottom_ll_www);
+        mBottomM = view.findViewById(R.id.full_dialog_bottom_ll_m);
+        mBottomHTTP = view.findViewById(R.id.full_dialog_bottom_ll_http);
+        mBottomHTTPS = view.findViewById(R.id.full_dialog_bottom_ll_https);
+        mBottomPoint = view.findViewById(R.id.full_dialog_bottom_ll_point);
+        mBottomSlash = view.findViewById(R.id.full_dialog_bottom_ll_slash);
+        mBottomCN = view.findViewById(R.id.full_dialog_bottom_ll_cn);
+        mBottomCOM = view.findViewById(R.id.full_dialog_bottom_ll_com);
+
         view.findViewById(R.id.full_dialog_main_ll).setOnClickListener(mOnClickListener);
 
         mQRCodeIV.setOnClickListener(mOnClickListener);
@@ -87,6 +106,14 @@ public class FullScreenDialog extends Dialog {
         mTitleET.addTextChangedListener(mTextWatcher);
         mClipDataTipsTV.setOnClickListener(mOnClickListener);
         mClipDataTV.setOnClickListener(mOnClickListener);
+        mBottomWWW.setOnClickListener(mOnClickListener);
+        mBottomM.setOnClickListener(mOnClickListener);
+        mBottomHTTP.setOnClickListener(mOnClickListener);
+        mBottomHTTPS.setOnClickListener(mOnClickListener);
+        mBottomPoint.setOnClickListener(mOnClickListener);
+        mBottomSlash.setOnClickListener(mOnClickListener);
+        mBottomCN.setOnClickListener(mOnClickListener);
+        mBottomCOM.setOnClickListener(mOnClickListener);
 
 
         if (!TextUtils.isEmpty(mUrl) && !mUrl.equals("about:blank")) {
@@ -144,6 +171,38 @@ public class FullScreenDialog extends Dialog {
                 case R.id.full_dialog_main_ll:
                     FullScreenDialog.this.dismiss();
                     break;
+                case R.id.full_dialog_bottom_ll_www:
+                    mTitleET.setText(mTitleET.getText().toString() + mBottomWWW.getText().toString());
+                    mTitleET.setSelection(mTitleET.getText().toString().length());
+                    break;
+                case R.id.full_dialog_bottom_ll_m:
+                    mTitleET.setText(mTitleET.getText().toString() + mBottomM.getText().toString());
+                    mTitleET.setSelection(mTitleET.getText().toString().length());
+                    break;
+                case R.id.full_dialog_bottom_ll_http:
+                    mTitleET.setText(mTitleET.getText().toString() + mBottomHTTP.getText().toString());
+                    mTitleET.setSelection(mTitleET.getText().toString().length());
+                    break;
+                case R.id.full_dialog_bottom_ll_https:
+                    mTitleET.setText(mTitleET.getText().toString() + mBottomHTTPS.getText().toString());
+                    mTitleET.setSelection(mTitleET.getText().toString().length());
+                    break;
+                case R.id.full_dialog_bottom_ll_point:
+                    mTitleET.setText(mTitleET.getText().toString() + mBottomPoint.getText().toString());
+                    mTitleET.setSelection(mTitleET.getText().toString().length());
+                    break;
+                case R.id.full_dialog_bottom_ll_slash:
+                    mTitleET.setText(mTitleET.getText().toString() + mBottomSlash.getText().toString());
+                    mTitleET.setSelection(mTitleET.getText().toString().length());
+                    break;
+                case R.id.full_dialog_bottom_ll_cn:
+                    mTitleET.setText(mTitleET.getText().toString() + mBottomCN.getText().toString());
+                    mTitleET.setSelection(mTitleET.getText().toString().length());
+                    break;
+                case R.id.full_dialog_bottom_ll_com:
+                    mTitleET.setText(mTitleET.getText().toString() + mBottomCOM.getText().toString());
+                    mTitleET.setSelection(mTitleET.getText().toString().length());
+                    break;
                 default:
                     break;
 
@@ -151,6 +210,20 @@ public class FullScreenDialog extends Dialog {
         }
 
     };
+
+    private void setBottomQuickText(boolean hasWorld) {
+
+        mBottomWWW.setVisibility(hasWorld ? View.GONE : View.VISIBLE);
+        mBottomM.setVisibility(hasWorld ? View.GONE : View.VISIBLE);
+        mBottomHTTP.setVisibility(hasWorld ? View.GONE : View.VISIBLE);
+        mBottomHTTPS.setVisibility(hasWorld ? View.GONE : View.VISIBLE);
+
+        mBottomPoint.setVisibility(hasWorld ? View.VISIBLE : View.GONE);
+        mBottomSlash.setVisibility(hasWorld ? View.VISIBLE : View.GONE);
+        mBottomCN.setVisibility(hasWorld ? View.VISIBLE : View.GONE);
+        mBottomCOM.setVisibility(hasWorld ? View.VISIBLE : View.GONE);
+
+    }
 
 
     private void loadUrl(String url) {
@@ -179,7 +252,9 @@ public class FullScreenDialog extends Dialog {
                 if (mClearIV.getVisibility() != View.VISIBLE) {
                     mClearIV.setVisibility(View.VISIBLE);
                 }
+                setBottomQuickText(true);
             } else {
+                setBottomQuickText(false);
                 if (mClearIV.getVisibility() != View.GONE) {
                     mClearIV.setVisibility(View.GONE);
                 }

@@ -227,7 +227,6 @@ public class Utils {
 
 
     public static boolean isAd(Context context, String url) {
-        Log.i("hcy","isAd url:" + url);
         Resources res = context.getResources();
         String[] filterUrls = AdFiltersUtils.adIP;
         if (filterUrls == null || filterUrls.length <= 0) {
@@ -244,11 +243,9 @@ public class Utils {
                     }
                 }
                 if (isThis) {
-                    Log.i("hcy",adUrl + ",isAd * url:" + url);
                     return true;
                 }
             } else if (url.contains(adUrl)) {
-                Log.i("hcy","isAd  url:" + url);
                 return true;
             }
         }

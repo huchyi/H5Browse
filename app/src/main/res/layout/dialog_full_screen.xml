@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/full_dialog_main_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/full_dialog_main_ll"
     android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/full_dialog_title_rl"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:background="@color/colorGray">
@@ -60,7 +61,9 @@
             android:layout_marginRight="1dp"
             android:layout_toLeftOf="@+id/full_dialog_iv_search"
             android:contentDescription="清除"
-            android:scaleType="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/close" />
 
     </RelativeLayout>
@@ -70,20 +73,118 @@
         android:id="@+id/full_dialog_clip_data_tips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/full_dialog_title_rl"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:padding="10dp"
-        android:textColor="#aaaaaa"
         android:text="点击下方内容粘贴到输入框"
-        android:visibility="gone" />
+        android:textColor="#aaaaaa"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/full_dialog_clip_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/full_dialog_clip_data_tips"
+        android:layout_centerHorizontal="true"
         android:padding="10dp"
         android:textColor="#000000"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
+    <LinearLayout
+        android:id="@+id/full_dialog_bottom_ll"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="#eeeeee"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/full_dialog_bottom_ll_www"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@drawable/iv_back_selector"
+            android:gravity="center"
+            android:text="www." />
+
+        <TextView
+            android:id="@+id/full_dialog_bottom_ll_m"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@drawable/iv_back_selector"
+            android:gravity="center"
+            android:text="m." />
+
+        <TextView
+            android:id="@+id/full_dialog_bottom_ll_http"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@drawable/iv_back_selector"
+            android:gravity="center"
+            android:text="http://" />
+
+        <TextView
+            android:id="@+id/full_dialog_bottom_ll_https"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@drawable/iv_back_selector"
+            android:gravity="center"
+            android:text="https://" />
+
+        <TextView
+            android:id="@+id/full_dialog_bottom_ll_point"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@drawable/iv_back_selector"
+            android:gravity="center"
+            android:text="."
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/full_dialog_bottom_ll_slash"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@drawable/iv_back_selector"
+            android:gravity="center"
+            android:text="/"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/full_dialog_bottom_ll_cn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@drawable/iv_back_selector"
+            android:gravity="center"
+            android:text=".cn"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/full_dialog_bottom_ll_com"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:background="@drawable/iv_back_selector"
+            android:gravity="center"
+            android:text=".com"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</RelativeLayout>
