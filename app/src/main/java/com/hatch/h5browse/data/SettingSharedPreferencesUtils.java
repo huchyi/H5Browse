@@ -16,6 +16,8 @@ public class SettingSharedPreferencesUtils {
 
     public static final String AD_BLOCK_MODE = "ad_block_mode";//广告拦截
 
+    public static final String KEY_HISTORY_RECORD = "key_history_record";//浏览历史记录
+
     public static final String SEARCH_URL = "search_url";//默认搜索方式
 
     public static final String HOME_PAGE_URL = "home_page_url";//默认搜索方式

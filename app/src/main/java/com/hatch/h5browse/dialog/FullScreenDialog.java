@@ -27,6 +27,7 @@ import com.hatch.h5browse.R;
 import com.hatch.h5browse.bean.KeyHistoryBean;
 import com.hatch.h5browse.common.KeyBordUtil;
 import com.hatch.h5browse.common.Utils;
+import com.hatch.h5browse.data.SettingSharedPreferencesUtils;
 import com.hatch.h5browse.database.KeyHistoryDao;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class FullScreenDialog extends Dialog {
     private ImageView mSearchIV;
     private EditText mTitleET;
     private ListView listView;
+    private TextView mClearHistoryTV;
 
     private TextView mBottomWWW;
     private TextView mBottomM;
@@ -56,6 +58,7 @@ public class FullScreenDialog extends Dialog {
     private OnFullScreenDialogListener OnFullScreenDialogListener;
     private Context mContext;
     private MyAdapter KeyHistoryAdapter;
+    private boolean isHistoryRecord = false;
 
     public FullScreenDialog(Context context, String url) {
         super(context);
@@ -99,6 +102,7 @@ public class FullScreenDialog extends Dialog {
         mClipDataTipsTV = view.findViewById(R.id.full_dialog_clip_data_tips);
         mClipDataTV = view.findViewById(R.id.full_dialog_clip_data);
         listView = view.findViewById(R.id.full_dialog_list_view);
+        mClearHistoryTV = view.findViewById(R.id.full_dialog_clear_history);
 
 
         mBottomWWW = view.findViewById(R.id.full_dialog_bottom_ll_www);
@@ -111,7 +115,7 @@ public class FullScreenDialog extends Dialog {
         mBottomCOM = view.findViewById(R.id.full_dialog_bottom_ll_com);
 
         view.findViewById(R.id.full_dialog_main_ll).setOnClickListener(mOnClickListener);
-        view.findViewById(R.id.full_dialog_clear_history).setOnClickListener(mOnClickListener);
+
 
         mQRCodeIV.setOnClickListener(mOnClickListener);
         mClearIV.setOnClickListener(mOnClickListener);
@@ -119,6 +123,7 @@ public class FullScreenDialog extends Dialog {
         mTitleET.addTextChangedListener(mTextWatcher);
         mClipDataTipsTV.setOnClickListener(mOnClickListener);
         mClipDataTV.setOnClickListener(mOnClickListener);
+        mClearHistoryTV.setOnClickListener(mOnClickListener);
         mBottomWWW.setOnClickListener(mOnClickListener);
         mBottomM.setOnClickListener(mOnClickListener);
         mBottomHTTP.setOnClickListener(mOnClickListener);
@@ -146,11 +151,15 @@ public class FullScreenDialog extends Dialog {
         }
 
         //搜索历史
+        isHistoryRecord = (boolean) SettingSharedPreferencesUtils.getParam(getContext(), SettingSharedPreferencesUtils.KEY_HISTORY_RECORD, false);
         try {
-            ArrayList<KeyHistoryBean> beans = new ArrayList<>(KeyHistoryDao.getInstance().findAll());
-            if (beans.size() > 0) {
-                KeyHistoryAdapter = new MyAdapter(getContext(), beans);
-                listView.setAdapter(KeyHistoryAdapter);
+            if (isHistoryRecord) {
+                mClearHistoryTV.setVisibility(View.VISIBLE);
+                ArrayList<KeyHistoryBean> beans = new ArrayList<>(KeyHistoryDao.getInstance().findAll());
+                if (beans.size() > 0) {
+                    KeyHistoryAdapter = new MyAdapter(getContext(), beans);
+                    listView.setAdapter(KeyHistoryAdapter);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,7 +195,9 @@ public class FullScreenDialog extends Dialog {
                     keyHistoryBean.key = key;
                     keyHistoryBean.url = url;
                     try {
-                        KeyHistoryDao.getInstance().insert(keyHistoryBean);
+                        if (isHistoryRecord) {
+                            KeyHistoryDao.getInstance().insert(keyHistoryBean);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

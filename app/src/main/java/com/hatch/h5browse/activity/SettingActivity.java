@@ -23,6 +23,7 @@ import com.just.agentweb.AgentWebConfig;
 public class SettingActivity extends Activity implements View.OnClickListener {
 
     private ImageView adBlockIV;
+    private ImageView historyRecordIV;
     private TextView searchUrlTV;
     private TextView homePageUrlTV;
 
@@ -42,6 +43,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         adBlockIV = findViewById(R.id.setting_ad_block_switch);
         adBlockIV.setOnClickListener(this);
+        historyRecordIV = findViewById(R.id.setting_history_record_switch);
+        historyRecordIV.setOnClickListener(this);
         searchUrlTV = findViewById(R.id.setting_default_search_text);
         homePageUrlTV = findViewById(R.id.setting_default_homepage_text);
     }
@@ -50,6 +53,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         //广告拦截
         boolean isOpen = (boolean) SettingSharedPreferencesUtils.getParam(this, SettingSharedPreferencesUtils.AD_BLOCK_MODE, false);
         adBlockIV.setImageResource(isOpen ? R.mipmap.swicth_open_icon : R.mipmap.swicth_close_icon);
+
+
+        //
+        boolean isRecord = (boolean) SettingSharedPreferencesUtils.getParam(this, SettingSharedPreferencesUtils.KEY_HISTORY_RECORD, false);
+        historyRecordIV.setImageResource(isRecord ? R.mipmap.swicth_open_icon : R.mipmap.swicth_close_icon);
 
         //搜索方式
         String searchUrl = (String) SettingSharedPreferencesUtils.getParam(SettingActivity.this,
@@ -77,6 +85,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
             case R.id.setting_ad_block_switch:
                 adBlockSwitch();
+                break;
+            case R.id.setting_history_record_switch:
+                historyRecordSwitch();
                 break;
             case R.id.setting_default_search:
                 switchSearchModel();
@@ -120,6 +131,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         SettingSharedPreferencesUtils.setParam(this, SettingSharedPreferencesUtils.AD_BLOCK_MODE, !isOpen);
     }
 
+    /**
+     * 浏览历史记录，true为记录
+     */
+    public void historyRecordSwitch() {
+        boolean isRecord = (boolean) SettingSharedPreferencesUtils.getParam(this, SettingSharedPreferencesUtils.KEY_HISTORY_RECORD, false);
+        historyRecordIV.setImageResource(isRecord ? R.mipmap.swicth_close_icon : R.mipmap.swicth_open_icon);
+        SettingSharedPreferencesUtils.setParam(this, SettingSharedPreferencesUtils.KEY_HISTORY_RECORD, !isRecord);
+    }
 
     /**
      * 切换搜索模式
