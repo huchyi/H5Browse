@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -22,6 +24,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
     private ImageView adBlockIV;
     private TextView searchUrlTV;
+    private TextView homePageUrlTV;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,10 +38,12 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.setting_title_back).setOnClickListener(this);
         findViewById(R.id.setting_clear_cache).setOnClickListener(this);
         findViewById(R.id.setting_default_search).setOnClickListener(this);
+        findViewById(R.id.setting_default_homepage).setOnClickListener(this);
 
         adBlockIV = findViewById(R.id.setting_ad_block_switch);
         adBlockIV.setOnClickListener(this);
         searchUrlTV = findViewById(R.id.setting_default_search_text);
+        homePageUrlTV = findViewById(R.id.setting_default_homepage_text);
     }
 
     private void defaultSetting() {
@@ -55,6 +60,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         } else {
             searchUrlTV.setText("Google");
         }
+
+        //home主页
+        homePageUrlTV.setText((String) SettingSharedPreferencesUtils.getParam(SettingActivity.this,
+                SettingSharedPreferencesUtils.HOME_PAGE_URL,
+                "about:blank"));
     }
 
     @Override
@@ -71,9 +81,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             case R.id.setting_default_search:
                 switchSearchModel();
                 break;
+            case R.id.setting_default_homepage:
+                setHomePage();
+                break;
             case R.id.setting_title_back:
                 finish();
                 break;
+
             default:
                 break;
 
@@ -106,6 +120,10 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         SettingSharedPreferencesUtils.setParam(this, SettingSharedPreferencesUtils.AD_BLOCK_MODE, !isOpen);
     }
 
+
+    /**
+     * 切换搜索模式
+     */
     public void switchSearchModel() {
 
         String[] items = {"Baidu", "Google", "取消"};
@@ -134,6 +152,55 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                     }
                 })
                 .create().show();
+
+    }
+
+    /**
+     * 设置默认的搜索方式
+     */
+    private void setHomePage() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final View view = getLayoutInflater().inflate(R.layout.activity_setting_dialog_home_page_edit, null);
+        final EditText urlET = view.findViewById(R.id.dialog_home_page_edit);
+        urlET.setText((String) SettingSharedPreferencesUtils.getParam(SettingActivity.this,
+                SettingSharedPreferencesUtils.HOME_PAGE_URL,
+                "about:blank"));
+        builder.setView(view)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String url = urlET.getText().toString();
+                        if (!TextUtils.isEmpty(url)) {
+                            SettingSharedPreferencesUtils.setParam(SettingActivity.this,
+                                    SettingSharedPreferencesUtils.HOME_PAGE_URL,
+                                    url);
+                            homePageUrlTV.setText(url);
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        final AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.dialog_home_page_default).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SettingSharedPreferencesUtils.setParam(SettingActivity.this,
+                        SettingSharedPreferencesUtils.HOME_PAGE_URL,
+                        "about:blank");
+                homePageUrlTV.setText("about:blank");
+                alertDialog.dismiss();
+            }
+        });
+
+
+        alertDialog.show();
 
     }
 
