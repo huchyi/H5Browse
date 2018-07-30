@@ -113,4 +113,48 @@
     </RelativeLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/setting_default_search"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/iv_back_selector"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:id="@+id/setting_default_search_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="默认搜索方式"
+            android:textColor="@color/colorMain"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/setting_default_search_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/setting_default_search_tips"
+            android:gravity="right"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:src="@mipmap/forward_icon"
+            android:text="baidu" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorMain" />
+    </RelativeLayout>
+
+
 </LinearLayout>

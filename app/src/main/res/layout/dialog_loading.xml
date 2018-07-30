@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+    <!-- //注意把这里设置为透明背景，不然loading框的四个角会有背景颜色-->
+    <LinearLayout
+        android:id="@+id/dialog_loading_LinearLayout"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/loading_shape"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/dialog_loading_progressbar"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="50.0dp"
+            android:layout_height="50.0dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent" />
+
+        <TextView
+            android:id="@+id/dialog_loading_text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:visibility="gone"
+            android:textColor="#fff" />
+    </LinearLayout>
+</RelativeLayout>

@@ -337,7 +337,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
                     mainActivity.pageShow(bitmap);
                     break;
                 case R.id.iv_home:
-                    if (!TextUtils.isEmpty(mUrl) && !TextUtils.isEmpty(mTitleUrl) && !mUrl.equals(mTitleUrl)) {
+                    if (!TextUtils.isEmpty(mUrl) && !TextUtils.isEmpty(mTitleUrl) && mUrl.equals(mTitleUrl)) {
                         MyApplication.showToast("已经是首页了");
                         return;
                     }

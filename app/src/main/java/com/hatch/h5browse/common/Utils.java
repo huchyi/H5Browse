@@ -20,6 +20,7 @@ import android.webkit.WebView;
 import com.hatch.h5browse.MyApplication;
 import com.hatch.h5browse.R;
 import com.hatch.h5browse.activity.MainActivity;
+import com.hatch.h5browse.data.SettingSharedPreferencesUtils;
 import com.hatch.h5browse.database.CollectionDao;
 import com.hatch.h5browse.database.DownloadDao;
 
@@ -195,7 +196,14 @@ public class Utils {
         if (Patterns.WEB_URL.matcher(url).matches()) {
             return "http://" + url;
         }
-        String mSearchUrl = "https://m.baidu.com/s?word=";
+//        String mSearchUrl = "https://m.baidu.com/s?word=";//"https://m.google.com/search?q=";
+        String mSearchUrl = (String) SettingSharedPreferencesUtils.getParam(MyApplication.getApplication(),
+                SettingSharedPreferencesUtils.SEARCH_URL,
+                "https://m.baidu.com/s?word=");
+        if (TextUtils.isEmpty(mSearchUrl)) {
+            mSearchUrl = "https://m.baidu.com/s?word=";
+        }
+
         url = mSearchUrl + url;
         return url;
     }
