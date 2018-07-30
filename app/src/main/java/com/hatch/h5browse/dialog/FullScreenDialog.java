@@ -10,18 +10,27 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hatch.h5browse.MyApplication;
 import com.hatch.h5browse.R;
+import com.hatch.h5browse.bean.KeyHistoryBean;
 import com.hatch.h5browse.common.KeyBordUtil;
 import com.hatch.h5browse.common.Utils;
+import com.hatch.h5browse.database.KeyHistoryDao;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -32,6 +41,7 @@ public class FullScreenDialog extends Dialog {
     private ImageView mClearIV;
     private ImageView mSearchIV;
     private EditText mTitleET;
+    private ListView listView;
 
     private TextView mBottomWWW;
     private TextView mBottomM;
@@ -45,6 +55,7 @@ public class FullScreenDialog extends Dialog {
     private String mUrl = "";
     private OnFullScreenDialogListener OnFullScreenDialogListener;
     private Context mContext;
+    private MyAdapter KeyHistoryAdapter;
 
     public FullScreenDialog(Context context, String url) {
         super(context);
@@ -87,6 +98,7 @@ public class FullScreenDialog extends Dialog {
         mSearchIV = view.findViewById(R.id.full_dialog_iv_search);
         mClipDataTipsTV = view.findViewById(R.id.full_dialog_clip_data_tips);
         mClipDataTV = view.findViewById(R.id.full_dialog_clip_data);
+        listView = view.findViewById(R.id.full_dialog_list_view);
 
 
         mBottomWWW = view.findViewById(R.id.full_dialog_bottom_ll_www);
@@ -99,6 +111,7 @@ public class FullScreenDialog extends Dialog {
         mBottomCOM = view.findViewById(R.id.full_dialog_bottom_ll_com);
 
         view.findViewById(R.id.full_dialog_main_ll).setOnClickListener(mOnClickListener);
+        view.findViewById(R.id.full_dialog_clear_history).setOnClickListener(mOnClickListener);
 
         mQRCodeIV.setOnClickListener(mOnClickListener);
         mClearIV.setOnClickListener(mOnClickListener);
@@ -132,6 +145,17 @@ public class FullScreenDialog extends Dialog {
             }
         }
 
+        //搜索历史
+        try {
+            ArrayList<KeyHistoryBean> beans = new ArrayList<>(KeyHistoryDao.getInstance().findAll());
+            if (beans.size() > 0) {
+                KeyHistoryAdapter = new MyAdapter(getContext(), beans);
+                listView.setAdapter(KeyHistoryAdapter);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -151,12 +175,22 @@ public class FullScreenDialog extends Dialog {
                     }
                     break;
                 case R.id.full_dialog_iv_search:
-                    String url = mTitleET.getText().toString();
-                    if (TextUtils.isEmpty(url)) {
+                    String key = mTitleET.getText().toString();
+                    if (TextUtils.isEmpty(key)) {
                         MyApplication.showToast("内容不能为空");
                         return;
                     }
-                    loadUrl(Utils.getUrl(url));
+                    String url = Utils.getUrl(key);
+                    KeyHistoryBean keyHistoryBean = new KeyHistoryBean();
+                    keyHistoryBean.id = System.currentTimeMillis() + "";
+                    keyHistoryBean.key = key;
+                    keyHistoryBean.url = url;
+                    try {
+                        KeyHistoryDao.getInstance().insert(keyHistoryBean);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    loadUrl(url);
                     break;
                 case R.id.full_dialog_clip_data_tips:
                 case R.id.full_dialog_clip_data:
@@ -170,6 +204,17 @@ public class FullScreenDialog extends Dialog {
                     break;
                 case R.id.full_dialog_main_ll:
                     FullScreenDialog.this.dismiss();
+                    break;
+                case R.id.full_dialog_clear_history://清空搜索历史记录
+                    try {
+                        KeyHistoryDao.getInstance().deleteAll();
+                        if (KeyHistoryAdapter != null) {
+                            ArrayList<KeyHistoryBean> beans = new ArrayList<>(KeyHistoryDao.getInstance().findAll());
+                            KeyHistoryAdapter.notifyData(beans);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case R.id.full_dialog_bottom_ll_www:
                     mTitleET.setText(mTitleET.getText().toString() + mBottomWWW.getText().toString());
@@ -263,4 +308,67 @@ public class FullScreenDialog extends Dialog {
     };
 
 
+    public class MyAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+        private List<KeyHistoryBean> mDatas;
+
+        //MyAdapter需要一个Context，通过Context获得Layout.inflater，然后通过inflater加载item的布局
+        public MyAdapter(Context context, List<KeyHistoryBean> datas) {
+
+            mInflater = LayoutInflater.from(context);
+            mDatas = datas;
+        }
+
+        public void notifyData(List<KeyHistoryBean> datas) {
+            mDatas = datas;
+            notifyDataSetChanged();
+        }
+
+        //返回数据集的长度
+        @Override
+        public int getCount() {
+            return mDatas.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mDatas.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        //这个方法才是重点，我们要为它编写一个ViewHolder
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.dialog_full_key_list_item, parent, false); //加载布局
+                holder = new ViewHolder();
+                holder.titleTv = convertView.findViewById(R.id.dialog_full_key_list_item_content);
+                convertView.setTag(holder);
+            } else {   //else里面说明，convertView已经被复用了，说明convertView中已经设置过tag了，即holder
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            final KeyHistoryBean bean = mDatas.get(position);
+            holder.titleTv.setText(bean.key);
+            holder.titleTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadUrl(bean.url);
+                }
+            });
+
+            return convertView;
+        }
+
+        //这个ViewHolder只能服务于当前这个特定的adapter，因为ViewHolder里会指定item的控件，不同的ListView，item可能不同，所以ViewHolder写成一个私有的类
+        private class ViewHolder {
+            TextView titleTv;
+        }
+
+    }
 }

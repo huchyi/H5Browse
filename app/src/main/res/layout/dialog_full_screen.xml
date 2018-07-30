@@ -71,15 +71,17 @@
 
     <TextView
         android:id="@+id/full_dialog_clip_data_tips"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/full_dialog_title_rl"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:padding="10dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:padding="5dp"
         android:text="点击下方内容粘贴到输入框"
         android:textColor="#aaaaaa"
+        android:textSize="12dp"
         android:visibility="visible" />
 
     <TextView
@@ -88,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/full_dialog_clip_data_tips"
         android:layout_centerHorizontal="true"
-        android:padding="10dp"
+        android:padding="5dp"
         android:textColor="#000000"
         android:visibility="visible" />
 
@@ -187,4 +189,30 @@
             android:visibility="gone" />
 
     </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/full_dialog_clear_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/full_dialog_clip_data"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="清空历史记录"
+        android:textColor="@color/colorMain"
+        android:textSize="12dp"
+        android:visibility="visible" />
+
+    <ListView
+        android:id="@+id/full_dialog_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/full_dialog_clear_history"
+        android:layout_marginBottom="40dp" />
+
+
 </RelativeLayout>

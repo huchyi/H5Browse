@@ -10,12 +10,7 @@ import io.realm.RealmModel;
 import io.realm.RealmResults;
 
 public class CollectionDao extends BaseDaoImp<CollectionBean> {
-    private CollectionDao() {
-    }
 
-    private Realm getRealm() {
-        return MyRealmMigration.getIntance().getRealm();
-    }
 
     private static CollectionDao dao;
 

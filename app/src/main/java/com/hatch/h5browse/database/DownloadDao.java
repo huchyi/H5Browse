@@ -12,13 +12,6 @@ import io.realm.RealmResults;
 
 public class DownloadDao extends BaseDaoImp<DownloadBean>  {
 
-    private DownloadDao() {
-    }
-
-    public Realm getRealm() {
-        return MyRealmMigration.getIntance().getRealm();
-    }
-
     private static DownloadDao dao;
 
     public static DownloadDao getInstance() {

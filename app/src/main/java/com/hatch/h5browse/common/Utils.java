@@ -23,6 +23,7 @@ import com.hatch.h5browse.activity.MainActivity;
 import com.hatch.h5browse.data.SettingSharedPreferencesUtils;
 import com.hatch.h5browse.database.CollectionDao;
 import com.hatch.h5browse.database.DownloadDao;
+import com.hatch.h5browse.database.KeyHistoryDao;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -231,6 +232,7 @@ public class Utils {
     public static void closeAllDB() {
         CollectionDao.getInstance().close();
         DownloadDao.getInstance().close();
+        KeyHistoryDao.getInstance().close();
     }
 
 

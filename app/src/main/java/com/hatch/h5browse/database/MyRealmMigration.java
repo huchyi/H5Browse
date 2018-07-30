@@ -3,10 +3,13 @@ package com.hatch.h5browse.database;
 import android.util.Log;
 
 import com.hatch.h5browse.bean.CollectionBean;
+import com.hatch.h5browse.bean.KeyHistoryBean;
 
 import io.realm.DynamicRealm;
+import io.realm.FieldAttribute;
 import io.realm.Realm;
 import io.realm.RealmMigration;
+import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
 import static io.realm.Realm.getDefaultInstance;
@@ -54,17 +57,24 @@ public class MyRealmMigration implements RealmMigration {
      */
     @Override
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
-//        RealmSchema schema = realm.getSchema();
-//        Log.i("hcy", "oldVersion:" + oldVersion);
-//        switch ((int) oldVersion) {
-//            case 2: {
+        RealmSchema schema = realm.getSchema();
+        Log.i("hcy", "oldVersion:" + oldVersion);
+        switch ((int) oldVersion) {
+            case 1: {
 //                schema.get(CollectionBean.class.getName()).addField("id", String.class)//添加字段
 //                        .addField("iconPath", String.class);//添加字段
 ////                        .removeField("age");//移除age属性
 //                //注意version不要break,因为前面的版本都要升级
 //                oldVersion++;
-//            }
-//        }
+            }
+            case 2: {
+                // Create a new class
+                RealmObjectSchema petSchema = schema.create(KeyHistoryBean.class.getName())
+                        .addField("id", String.class, FieldAttribute.REQUIRED)
+                        .addField("key", String.class, FieldAttribute.REQUIRED)
+                        .addField("url", String.class, FieldAttribute.REQUIRED);
+            }
+        }
 
     }
 }

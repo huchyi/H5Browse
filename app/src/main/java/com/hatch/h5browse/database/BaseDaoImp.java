@@ -1,9 +1,23 @@
 package com.hatch.h5browse.database;
 
 
+import android.util.Log;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
+import io.realm.Realm;
+
 public class BaseDaoImp<T> implements BaseDao<T> {
+
+
+
+
+    public Realm getRealm() {
+        return MyRealmMigration.getIntance().getRealm();
+    }
+
     @Override
     public void insert(T t) throws Exception {
 
