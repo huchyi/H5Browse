@@ -111,11 +111,17 @@ public class Utils {
      * 获取去网页截图到data/data/<pakage>/files目录
      */
     public static String saveUrlIcon(String name, Bitmap iconb) {
+        if(iconb == null){
+            return null;
+        }
         String filesDir = MyApplication.getApplication().getFilesDir().toString() + "/web_icon/" + name + ".jpg";
         File file = new File(filesDir);
         byte[] bytes = Bitmap2Bytes(iconb);
-        FileIOUtils.writeFileFromBytesByStream(file, bytes);
-        return filesDir;
+        if (bytes.length > 0) {
+            FileIOUtils.writeFileFromBytesByStream(file, bytes);
+            return filesDir;
+        }
+        return null;
     }
 
     /**
