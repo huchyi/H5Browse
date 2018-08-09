@@ -109,7 +109,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
      * 清除缓存
      */
     public void clearCache() {
-        LoadingDialog loadingDialog = new LoadingDialog(this, "清理缓存中。。。", 3);
+        LoadingDialog loadingDialog = new LoadingDialog(this, "清理缓存中。。。", 2);
         loadingDialog.setCanceledOnTouchOutside(false);
         loadingDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
