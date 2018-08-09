@@ -54,7 +54,7 @@
         android:id="@+id/download_bottom_btn"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:background="@color/white">
 
