@@ -534,6 +534,15 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            //判断是否是广告相关的资源链接
+            String url = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                url = request.getUrl().toString();
+            }
+            if (isAdBlock && getContext() != null && !TextUtils.isEmpty(url) && Utils.isAd(getContext(), url)) {
+                return new WebResourceResponse(null, null, null);
+            }
+
             return super.shouldInterceptRequest(view, request);
         }
 
