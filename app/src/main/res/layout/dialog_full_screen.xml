@@ -39,6 +39,7 @@
             android:layout_centerInParent="true"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:imeOptions="actionSearch"
             android:layout_toLeftOf="@+id/full_dialog_iv_search"
             android:layout_toRightOf="@+id/full_dialog_iv_qr"
             android:background="@android:color/white"

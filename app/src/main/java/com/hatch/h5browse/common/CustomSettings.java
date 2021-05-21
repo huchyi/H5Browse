@@ -7,9 +7,9 @@ import android.webkit.WebView;
 
 import com.just.agentweb.AbsAgentWebSettings;
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.DefaultDownloadImpl;
 import com.just.agentweb.IAgentWebSettings;
 import com.just.agentweb.WebListenerManager;
-import com.just.agentweb.download.DefaultDownloadImpl;
 
 /**
  * Created by cenxiaozhong on 2017/5/26.
@@ -50,7 +50,6 @@ public class CustomSettings extends AbsAgentWebSettings {
     public WebListenerManager setDownloader(WebView webView, DownloadListener downloadListener) {
         return super.setDownloader(webView,
                 DefaultDownloadImpl.create((Activity) webView.getContext()
-                        , webView, null,
-                        null, mAgentWeb.getPermissionInterceptor()));
+                        , webView,  mAgentWeb.getPermissionInterceptor()));
     }
 }

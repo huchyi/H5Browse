@@ -11,11 +11,13 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 
 public class FullScreenDialog extends Dialog {
     private TextView mClipDataTipsTV;
@@ -82,6 +85,8 @@ public class FullScreenDialog extends Dialog {
         //<!--关键点1-->
         if (getWindow() != null) {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+                    |WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_full_screen, null);
         //<!--关键点2-->
@@ -121,6 +126,7 @@ public class FullScreenDialog extends Dialog {
         mClearIV.setOnClickListener(mOnClickListener);
         mSearchIV.setOnClickListener(mOnClickListener);
         mTitleET.addTextChangedListener(mTextWatcher);
+        mTitleET.setOnEditorActionListener(onEditorActionListener);
         mClipDataTipsTV.setOnClickListener(mOnClickListener);
         mClipDataTV.setOnClickListener(mOnClickListener);
         mClearHistoryTV.setOnClickListener(mOnClickListener);
@@ -164,9 +170,23 @@ public class FullScreenDialog extends Dialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    private TextView.OnEditorActionListener onEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+            if (i==IME_ACTION_SEARCH){
+                String content= mTitleET.getText().toString();
+                if (TextUtils.isEmpty(content)){
+                    return true;
+                }
+                //进行搜索的逻辑处理
+                gotoSearch();
+                return true;
+            }
+            return false;
+        }
+    };
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -184,24 +204,7 @@ public class FullScreenDialog extends Dialog {
                     }
                     break;
                 case R.id.full_dialog_iv_search:
-                    String key = mTitleET.getText().toString();
-                    if (TextUtils.isEmpty(key)) {
-                        MyApplication.showToast("内容不能为空");
-                        return;
-                    }
-                    String url = Utils.getUrl(key);
-                    KeyHistoryBean keyHistoryBean = new KeyHistoryBean();
-                    keyHistoryBean.id = System.currentTimeMillis() + "";
-                    keyHistoryBean.key = key;
-                    keyHistoryBean.url = url;
-                    try {
-                        if (isHistoryRecord) {
-                            KeyHistoryDao.getInstance().insert(keyHistoryBean);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    loadUrl(url);
+                    gotoSearch();
                     break;
                 case R.id.full_dialog_clip_data_tips:
                 case R.id.full_dialog_clip_data:
@@ -266,6 +269,27 @@ public class FullScreenDialog extends Dialog {
         }
 
     };
+
+    private void gotoSearch(){
+        String key = mTitleET.getText().toString();
+        if (TextUtils.isEmpty(key)) {
+            MyApplication.showToast("内容不能为空");
+            return;
+        }
+        String url = Utils.getUrl(key);
+        KeyHistoryBean keyHistoryBean = new KeyHistoryBean();
+        keyHistoryBean.id = System.currentTimeMillis() + "";
+        keyHistoryBean.key = key;
+        keyHistoryBean.url = url;
+        try {
+            if (isHistoryRecord) {
+                KeyHistoryDao.getInstance().insert(keyHistoryBean);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        loadUrl(url);
+    }
 
     private void setBottomQuickText(boolean hasWorld) {
 

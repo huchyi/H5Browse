@@ -6,7 +6,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.hatch.h5browse"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -34,9 +34,9 @@ dependencies {
     // agent
     implementation "com.android.support:design:${SUPPORT_LIB_VERSION}" // (3.0.0开始该库可选)
     implementation "com.android.support:support-v4:${SUPPORT_LIB_VERSION}"
-    implementation 'com.just.agentweb:agentweb:4.0.2' // (必选)
-    implementation 'com.just.agentweb:download:4.0.2' // (可选)
-    implementation 'com.just.agentweb:filechooser:4.0.2'// (可选)
+    implementation 'com.github.Justson.AgentWeb:agentweb-core:v4.1.9' // (必选)
+    implementation 'com.github.Justson.AgentWeb:agentweb-filechooser:v4.1.9' // (可选)
+    implementation 'com.github.Justson:Downloader:v4.1.9' // (可选)
     implementation 'com.coolindicator.sdk:coolindicator:1.0.0-beta'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'

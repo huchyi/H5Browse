@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -26,12 +27,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
+import android.view.inputmethod.InputMethodManager;
+import android.webkit.SslErrorHandler;
+//import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -61,27 +63,26 @@ import com.hatch.h5browse.service.DownloadService;
 import com.just.agentweb.AbsAgentWebSettings;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
+import com.just.agentweb.DefaultDownloadImpl;
 import com.just.agentweb.DefaultWebClient;
 import com.just.agentweb.IAgentWebSettings;
-import com.just.agentweb.LogUtils;
 import com.just.agentweb.MiddlewareWebChromeBase;
 import com.just.agentweb.MiddlewareWebClientBase;
 import com.just.agentweb.NestedScrollAgentWebView;
 import com.just.agentweb.PermissionInterceptor;
+import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebListenerManager;
-import com.just.agentweb.download.AgentWebDownloader;
-import com.just.agentweb.download.DefaultDownloadImpl;
-import com.just.agentweb.download.DownloadListenerAdapter;
-import com.just.agentweb.download.DownloadingService;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 
 public class BaseWebFragment extends Fragment implements FragmentKeyDown {
 
@@ -123,12 +124,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     /**
      * 用于方便打印测试
      */
-    private Gson mGson = new Gson();
     public static final String TAG = "hcy";
-    private MiddlewareWebClientBase mMiddleWareWebClient;
-    private MiddlewareWebChromeBase mMiddleWareWebChrome;
-    private DownloadingService mDownloadingService;
-    private AgentWebDownloader.ExtraService mExtraService;
 
     public static BaseWebFragment getInstance(Bundle bundle) {
 
@@ -381,6 +377,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     };
 
 
+
     protected WebChromeClient mWebChromeClient = new WebChromeClient() {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
@@ -400,17 +397,128 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         @Override
         public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
-            if (mTitleIV != null && !TextUtils.isEmpty(title)) {
+            if (!TextUtils.isEmpty(title)) {
                 if (title.length() > 10) {
                     title = title.substring(0, 10).concat("...");
                 }
             }
-            mTitleIV.setText(title);
+            if(mTitleIV != null){
+                mTitleIV.setText(title);
+            }
+
         }
     };
 
-    protected WebViewClient mWebViewClient = new WebViewClient() {
+//    protected WebViewClient mWebViewClient = new WebViewClient() {
+//
+//
+//        @Override
+//        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+//            super.onReceivedError(view, request, error);
+//        }
+//
+//        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//            return shouldOverrideUrlLoading(view, request.getUrl() + "");
+//        }
+//
+////        @Nullable
+////        @Override
+////        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+////            //判断是否是广告相关的资源链接
+////            Log.i("hcy", "shouldInterceptRequest request: ");
+////            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+////                if (isAdBlock && getContext() != null && Utils.isAd(getContext(), String.valueOf(request.getUrl()))) {
+////                    return new WebResourceResponse(null, null, null);
+////                }
+////            }
+////            return super.shouldInterceptRequest(view, request);
+////        }
+//
+//        @Nullable
+//        @Override
+//        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+//            //判断是否是广告相关的资源链接
+//            if (isAdBlock && getContext() != null && !TextUtils.isEmpty(url) && Utils.isAd(getContext(), url)) {
+//                return new WebResourceResponse(null, null, null);
+//            }
+//
+//            return super.shouldInterceptRequest(view, url);
+//        }
+//
+//        @Override
+//        public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+//            super.doUpdateVisitedHistory(view, url, isReload);
+//
+//            if (needClearHistory) {
+//                mAgentWeb.clearWebCache();
+//                needClearHistory = false;
+//            }
+//        }
+//
+//        //
+//        @Override
+//        public boolean shouldOverrideUrlLoading(final WebView view, String url) {
+//
+////            Log.i(TAG, "view:" + new Gson().toJson(view.getHitTestResult()));
+////            Log.i(TAG, "mWebViewClient shouldOverrideUrlLoading:" + url);
+//            //intent:// scheme的处理 如果返回false ， 则交给 DefaultWebClient 处理 ， 默认会打开该Activity  ， 如果Activity不存在则跳到应用市场上去.  true 表示拦截
+//            //例如优酷视频播放 ，intent://play?...package=com.youku.phone;end;
+//            //优酷想唤起自己应用播放该视频 ， 下面拦截地址返回 true  则会在应用内 H5 播放 ，禁止优酷唤起播放该视频， 如果返回 false ， DefaultWebClient  会根据intent 协议处理 该地址 ， 首先匹配该应用存不存在 ，如果存在 ， 唤起该应用播放 ， 如果不存在 ， 则跳到应用市场下载该应用 .
+////            if (url.startsWith("intent://") && url.contains("com.youku.phone")) {
+////                return true;
+////            }
+//			/*else if (isAlipay(view, mUrl))   //1.2.5开始不用调用该方法了 ，只要引入支付宝sdk即可 ， DefaultWebClient 默认会处理相应url调起支付宝
+//			    return true;*/
+//
+//
+//            return false;
+//        }
+//
+//        @Override
+//        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//            isLoading = true;
+//            setBottomImageBtnStatus();
+//        }
+//
+//        @Override
+//        public void onPageFinished(WebView view, String url) {
+//            super.onPageFinished(view, url);
+//            mTitleUrl = url;
+//            isLoading = false;
+//            setBottomImageBtnStatus();
+//            if (mLoadingNumIV.getVisibility() != View.GONE) {
+//                mLoadingNumIV.setVisibility(View.GONE);
+//            }
+//        }
+//        /*错误页回调该方法 ， 如果重写了该方法， 上面传入了布局将不会显示 ， 交由开发者实现，注意参数对齐。*/
+//	   /* public void onMainFrameError(AbsAgentWebUIController agentWebUIController, WebView view, int errorCode, String description, String failingUrl) {
+//
+//            Log.i(TAG, "AgentWebFragment onMainFrameError");
+//            agentWebUIController.onMainFrameError(view,errorCode,description,failingUrl);
+//
+//        }*/
+//
+//        @Override
+//        public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+//            super.onReceivedHttpError(view, request, errorResponse);
+//            isLoading = false;
+//        }
+//
+//        @Override
+//        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+//            super.onReceivedError(view, errorCode, description, failingUrl);
+//            isLoading = false;
+//        }
+//    };
 
+
+    /**
+     * 注意，重写WebViewClient的方法,super.xxx()请务必正确调用， 如果没有调用super.xxx(),则无法执行DefaultWebClient的方法
+     * 可能会影响到AgentWeb自带提供的功能,尽可能调用super.xxx()来完成洋葱模型
+     */
+    protected com.just.agentweb.WebViewClient mWebViewClient = new com.just.agentweb.WebViewClient() {
 
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
@@ -420,31 +528,28 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            return shouldOverrideUrlLoading(view, request.getUrl() + "");
+            return super.shouldOverrideUrlLoading(view, request);
         }
-
-//        @Nullable
-//        @Override
-//        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-//            //判断是否是广告相关的资源链接
-//            Log.i("hcy", "shouldInterceptRequest request: ");
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                if (isAdBlock && getContext() != null && Utils.isAd(getContext(), String.valueOf(request.getUrl()))) {
-//                    return new WebResourceResponse(null, null, null);
-//                }
-//            }
-//            return super.shouldInterceptRequest(view, request);
-//        }
 
         @Nullable
         @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            //判断是否是广告相关的资源链接
-            if (isAdBlock && getContext() != null && !TextUtils.isEmpty(url) && Utils.isAd(getContext(), url)) {
-                return new WebResourceResponse(null, null, null);
-            }
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            return super.shouldInterceptRequest(view, request);
+        }
 
-            return super.shouldInterceptRequest(view, url);
+        //
+        @Override
+        public boolean shouldOverrideUrlLoading(final WebView view, String url) {
+
+            Log.i(TAG, "view:" + new Gson().toJson(view.getHitTestResult()));
+            Log.i(TAG, "mWebViewClient shouldOverrideUrlLoading:" + url);
+            //优酷想唤起自己应用播放该视频 ， 下面拦截地址返回 true  则会在应用内 H5 播放 ，禁止优酷唤起播放该视频， 如果返回 false ， DefaultWebClient  会根据intent 协议处理 该地址 ， 首先匹配该应用存不存在 ，如果存在 ， 唤起该应用播放 ， 如果不存在 ， 则跳到应用市场下载该应用 .
+            if (url.startsWith("intent://") && url.contains("com.youku.phone")) {
+                return true;
+            }
+			/*else if (isAlipay(view, mUrl))   //1.2.5开始不用调用该方法了 ，只要引入支付宝sdk即可 ， DefaultWebClient 默认会处理相应url调起支付宝
+			    return true;*/
+            return super.shouldOverrideUrlLoading(view, url);
         }
 
         @Override
@@ -457,29 +562,10 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
             }
         }
 
-        //
-        @Override
-        public boolean shouldOverrideUrlLoading(final WebView view, String url) {
-
-//            Log.i(TAG, "view:" + new Gson().toJson(view.getHitTestResult()));
-//            Log.i(TAG, "mWebViewClient shouldOverrideUrlLoading:" + url);
-            //intent:// scheme的处理 如果返回false ， 则交给 DefaultWebClient 处理 ， 默认会打开该Activity  ， 如果Activity不存在则跳到应用市场上去.  true 表示拦截
-            //例如优酷视频播放 ，intent://play?...package=com.youku.phone;end;
-            //优酷想唤起自己应用播放该视频 ， 下面拦截地址返回 true  则会在应用内 H5 播放 ，禁止优酷唤起播放该视频， 如果返回 false ， DefaultWebClient  会根据intent 协议处理 该地址 ， 首先匹配该应用存不存在 ，如果存在 ， 唤起该应用播放 ， 如果不存在 ， 则跳到应用市场下载该应用 .
-//            if (url.startsWith("intent://") && url.contains("com.youku.phone")) {
-//                return true;
-//            }
-			/*else if (isAlipay(view, mUrl))   //1.2.5开始不用调用该方法了 ，只要引入支付宝sdk即可 ， DefaultWebClient 默认会处理相应url调起支付宝
-			    return true;*/
-
-
-            return false;
-        }
-
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
             isLoading = true;
-            setBottomImageBtnStatus();
         }
 
         @Override
@@ -494,15 +580,21 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         }
         /*错误页回调该方法 ， 如果重写了该方法， 上面传入了布局将不会显示 ， 交由开发者实现，注意参数对齐。*/
 	   /* public void onMainFrameError(AbsAgentWebUIController agentWebUIController, WebView view, int errorCode, String description, String failingUrl) {
-
             Log.i(TAG, "AgentWebFragment onMainFrameError");
             agentWebUIController.onMainFrameError(view,errorCode,description,failingUrl);
-
         }*/
 
         @Override
         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
             super.onReceivedHttpError(view, request, errorResponse);
+            isLoading = false;
+//			Log.i(TAG, "onReceivedHttpError:" + 3 + "  request:" + mGson.toJson(request) + "  errorResponse:" + mGson.toJson(errorResponse));
+        }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed();
+            super.onReceivedSslError(view, handler, error);
             isLoading = false;
         }
 
@@ -510,9 +602,9 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
             isLoading = false;
+//			Log.i(TAG, "onReceivedError:" + errorCode + "  description:" + description + "  errorResponse:" + failingUrl);
         }
     };
-
 
     protected PermissionInterceptor mPermissionInterceptor = new PermissionInterceptor() {
 
@@ -530,39 +622,6 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
         }
     };
 
-
-    /**
-     * 更新于 AgentWeb  4.0.0
-     */
-    protected DownloadListenerAdapter mDownloadListenerAdapter = new DownloadListenerAdapter() {
-
-        /**
-         *
-         * @param url                下载链接
-         * @param userAgent          UserAgent
-         * @param contentDisposition ContentDisposition
-         * @param mimetype           资源的媒体类型
-         * @param contentLength      文件长度
-         * @param extra              下载配置 ， 用户可以通过 Extra 修改下载icon ， 关闭进度条 ， 是否强制下载。
-         * @return true 表示用户处理了该下载事件 ， false 交给 AgentWeb 下载
-         */
-        @Override
-        public boolean onStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength, AgentWebDownloader.Extra extra) {
-
-            //**********************************自己处理下载*********************************
-
-            if (getActivity() != null) {
-                Log.i("hcy", "DownloadListenerAdapter  url:" + url);
-                Intent intent = new Intent(getActivity(), DownloadService.class);
-                intent.putExtra("url", url);
-                intent.putExtra("status", 1);
-                getActivity().startService(intent);
-            }
-
-            return true;
-        }
-
-    };
 
     /**
      * @return IAgentWebSettings
@@ -590,11 +649,10 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
                 return super.setDownloader(webView,
                         DefaultDownloadImpl
                                 .create((Activity) webView.getContext(),
-                                        webView,
-                                        mDownloadListenerAdapter,
-                                        mDownloadListenerAdapter,
-                                        this.mAgentWeb.getPermissionInterceptor()));
+                                        webView,this.mAgentWeb.getPermissionInterceptor()));
             }
+
+
         };
     }
 
@@ -884,7 +942,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
      * @return
      */
     protected MiddlewareWebClientBase getMiddlewareWebClient() {
-        return this.mMiddleWareWebClient = new MiddlewareWebViewClient() {
+        return new MiddlewareWebViewClient() {
             /**
              *
              * @param view
@@ -914,8 +972,7 @@ public class BaseWebFragment extends Fragment implements FragmentKeyDown {
     }
 
     protected MiddlewareWebChromeBase getMiddlewareWebChrome() {
-        return this.mMiddleWareWebChrome = new MiddlewareChromeClient() {
-        };
+        return new MiddlewareChromeClient();
     }
 }
 
